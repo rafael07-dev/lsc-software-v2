@@ -17,7 +17,7 @@ class Router{
             'diccionario' => ['controller' => 'DiccionarioController', 'method' => 'index'],
             'aprendizaje' => ['controller' => 'AprendizajeController', 'method' => 'index'],
             'quiz' => ['controller' => 'QuizController', 'method' => 'index'],
-            'perfil' => ['controller' => 'PerfilController', 'method' => 'index'],
+            'admin' => ['controller' => 'AdminController', 'method' => 'index'],
             'default' => ['controller' => 'MainController', 'method' => 'index'], // Ruta por defecto
         ];
     }
