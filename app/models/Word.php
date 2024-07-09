@@ -1,13 +1,13 @@
 <?php
 
-require_once './app/models/Letter.php';
+require_once __DIR__ . '/Letter.php';
 
 class Word {
 
     private $db;
 
     public function __construct() {
-        $this->db = Connection::connect();
+        $this->db = new mysqli("localhost", "root", "", "lsc-software");
     }
 
     // Método para obtener palabras que comienzan con una letra específica
@@ -28,6 +28,21 @@ class Word {
         $result = $stmt->get_result();
         $words = [];
         while ($row = $result->fetch_assoc()) {
+            $words[] = $row;
+        }
+        return $words;
+    }
+
+    public function getWordByLetterId($letterId){
+        $query = "SELECT id, word FROM words WHERE letter_id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('i', $letterId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $words = [];
+
+        while ($row = $result->fetch_assoc()){
             $words[] = $row;
         }
         return $words;
