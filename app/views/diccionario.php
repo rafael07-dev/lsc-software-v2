@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aplicación para Sordos</title>
     <link rel="stylesheet" href="public/css/style.css">
+
 </head>
 
 <body>
@@ -15,7 +16,7 @@
                 <?php if (!empty($data['letters'])) : ?>
                     <ul>
                         <?php foreach ($data['letters'] as $letter) : ?>
-                            <li><a href="index.php?page=diccionario&letter=<?= $letter['letter'] ?>"><?php echo $letter['letter'] ?></a></li>
+                            <li><a class="letter-link" data-letter-id="<?= $letter['id'] ?>" href="index.php?page=diccionario&letter=<?= $letter['letter'] ?>"><?php echo $letter['letter'] ?></a></li>
                         <?php endforeach; ?>
                     </ul>
                 <?php else : ?>
@@ -25,9 +26,7 @@
         </div>
 
         <div class="wrapper-word">
-
-            <div class="content">
-
+            <div class="content" id="word-panel">
                 <?php if (!empty($data['selectedLetter'])) : ?>
                     <h2>Palabras que comienzan con la letra <?php echo $data['selectedLetter']; ?>:</h2>
                 <?php endif; ?>
@@ -60,28 +59,35 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const wordLinks = document.querySelectorAll('.word-link');
+            const wordPanel = document.getElementById('word-panel');
 
-            wordLinks.forEach(link => {
-                link.addEventListener('click', function(event) {
-                    event.preventDefault();
-                    const wordId = this.getAttribute('data-word-id');
+            // Verificar si el contenedor de palabras está presente
+            if (wordPanel) {
+                wordPanel.addEventListener('click', function(event) {
+                    // Verificar si se hizo clic en un enlace de palabra
+                    if (event.target && event.target.matches('.word-link')) {
+                        event.preventDefault();
+                        const wordId = event.target.getAttribute('data-word-id');
 
-                    fetch(`ajax/getVideo.php?word_id=${wordId}`)
-                        .then(response => response.text())
-                        .then(html => {
-                            const videoPanel = document.getElementById('video-panel');
-                            if (videoPanel) {
-                                videoPanel.innerHTML = html;
-                            } else {
-                                console.error('Elemento video-panel no encontrado');
-                            }
-                        })
-                        .catch(error => console.error('Error al cargar el vídeo:', error));
+                        fetch(`ajax/getVideo.php?word_id=${wordId}`)
+                            .then(response => response.text())
+                            .then(html => {
+                                const videoPanel = document.getElementById('video-panel');
+                                if (videoPanel) {
+                                    videoPanel.innerHTML = html;
+                                } else {
+                                    console.error('Elemento video-panel no encontrado');
+                                }
+                            })
+                            .catch(error => console.error('Error al cargar el vídeo:', error));
+                    }
                 });
-            });
+            } else {
+                console.warn('Elemento word-panel no encontrado.');
+            }
         });
     </script>
+    <script src="public/js/script.js"></script>
 </body>
 
 </html>
