@@ -1,9 +1,12 @@
 <?php
 
 require_once './app/controllers/DiccionarioController.php';
+//require_once './app/controllers/AprendizajeController.php';
+//require_once './app/controllers/QuizController.php';
+require_once './app/controllers/MainController.php';
+require_once './app/controllers/AdminController.php';
 
-class Router{
-
+class Router {
     protected $routes = [];
 
     public function __construct() {
@@ -18,6 +21,10 @@ class Router{
             'aprendizaje' => ['controller' => 'AprendizajeController', 'method' => 'index'],
             'quiz' => ['controller' => 'QuizController', 'method' => 'index'],
             'admin' => ['controller' => 'AdminController', 'method' => 'index'],
+            'admin_login' => ['controller' => 'AdminController', 'method' => 'login'],
+            'admin_create_user' => ['controller' => 'AdminController', 'method' => 'createUser'],
+            'admin_update_password' => ['controller' => 'AdminController', 'method' => 'updatePassword'],
+            'admin_logout' => ['controller' => 'AdminController', 'method' => 'logout'],
             'default' => ['controller' => 'MainController', 'method' => 'index'], // Ruta por defecto
         ];
     }
@@ -28,7 +35,7 @@ class Router{
         
         // Validar si la ruta solicitada existe en el enrutador
         if (array_key_exists($requestedRoute, $this->routes)) {
-            // Incluir la vista correspondiente
+            // Incluir el controlador correspondiente
 
             $controllerName = $this->routes[$requestedRoute]['controller'];
             $methodName = $this->routes[$requestedRoute]['method'];
@@ -60,3 +67,4 @@ class Router{
     }
 }
 
+?>
