@@ -1,22 +1,27 @@
 <?php
 
 require_once './app/models/User.php';
+require_once './app/models/Word.php';
 
 class AdminController {
 
     protected $userModel;
+    protected $wordModel;
 
     public function __construct() {
         $this->userModel = new User();
+        $this->wordModel = new Word();
     }
 
     public function index() {
         session_start();
         // Verificar si el usuario está autenticado
         $this->requireLogin();
+        $words = $this->wordModel->getAllWords();
 
         // Lógica para mostrar la vista del panel de administrador
-        require_once './app/views/admin.php';
+        $this->render('admin', compact('words'));
+        //require_once './app/views/admin.php';
     }
 
     public function login() {
@@ -106,6 +111,12 @@ class AdminController {
             header('Location: index.php?page=admin_login');
             exit;
         }
+    }
+
+    protected function render($view, $data = []) {
+        require './app/views/templates/header.php';
+        require "./app/views/$view.php";
+        require './app/views/templates/footer.php';
     }
 }
 ?>
