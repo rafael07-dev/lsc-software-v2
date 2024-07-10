@@ -2,7 +2,7 @@
 
 require_once './app/controllers/DiccionarioController.php';
 //require_once './app/controllers/AprendizajeController.php';
-//require_once './app/controllers/QuizController.php';
+require_once './app/controllers/WordsController.php';
 require_once './app/controllers/MainController.php';
 require_once './app/controllers/AdminController.php';
 
@@ -22,6 +22,8 @@ class Router {
             'quiz' => ['controller' => 'QuizController', 'method' => 'index'],
             'admin' => ['controller' => 'AdminController', 'method' => 'index'],
             'admin_login' => ['controller' => 'AdminController', 'method' => 'login'],
+            'admin_add_word' => ['controller' => 'WordsController', 'method' => 'index'],
+            'create_word' => ['controller' => 'WordsController', 'method' => 'createWord'],
             'admin_create_user' => ['controller' => 'AdminController', 'method' => 'createUser'],
             'admin_update_password' => ['controller' => 'AdminController', 'method' => 'updatePassword'],
             'admin_logout' => ['controller' => 'AdminController', 'method' => 'logout'],
