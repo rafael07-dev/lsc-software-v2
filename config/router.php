@@ -24,6 +24,7 @@ class Router {
             'admin_login' => ['controller' => 'AdminController', 'method' => 'login'],
             'admin_add_word' => ['controller' => 'WordsController', 'method' => 'index'],
             'create_word' => ['controller' => 'WordsController', 'method' => 'createWord'],
+            'delete_word' => ['controller' => 'WordsController', 'method' => 'deleteWord'],
             'admin_create_user' => ['controller' => 'AdminController', 'method' => 'createUser'],
             'admin_update_password' => ['controller' => 'AdminController', 'method' => 'updatePassword'],
             'admin_logout' => ['controller' => 'AdminController', 'method' => 'logout'],
