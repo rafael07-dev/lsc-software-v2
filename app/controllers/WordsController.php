@@ -41,6 +41,31 @@ class WordsController{
         }
     }
 
+    public function deleteWord() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['_method']) && $_POST['_method'] === 'delete') {
+            $wordId = $_GET['id'];
+
+            $success = null;
+            $error = null;
+
+            $result = $this->wordModel->deleteWord($wordId);
+
+            if ($result) {
+                $success = "Palabra eliminada exitosamente.";
+            } else {
+                $error = "Error al eliminar la palabra.";
+            }
+
+            // Redirigir después de la eliminación
+            $words = $this->wordModel->getAllWords();
+            $this->render('admin', compact('words', 'success', 'error'));
+        } else {
+            // Manejar el caso en que no se envíe el método correctamente
+            header('Location: index.php?page=admin');
+            exit();
+        }
+    }
+
     public function getAllLetters() {
         return $this->letterModel->getLetters();
     }
