@@ -26,6 +26,13 @@ class Word {
         }
     }
 
+    public function deleteWord($word_id) {
+        $query = "DELETE FROM words WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('i', $word_id);
+        return $stmt->execute();
+    }
+
     public function getAllWords() {
         $query = "SELECT * FROM words";
         $result = $this->db->query($query);
