@@ -35,8 +35,8 @@
                             <td><?php echo $word['word'] ?></td>
 
                             <td>
-                                <a href="index.php?page=admin_edit_word&id=<?php echo $word['id'] ?>" class="btn btn-warning btn-sm me-2">Editar</a>
-                                <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#eliminaModal" data-bs-id="<?php echo $word['id'] ?>">Eliminar</a>
+                            <a href="index.php?page=admin_edit_word&id=<?php echo $word['id'] ?>" class="btn btn-warning btn-sm me-2">Editar</a>
+                            <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#eliminaModal" data-bs-id="<?php echo $word['id'] ?>">Eliminar</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
