@@ -33,6 +33,46 @@ class Word {
         return $stmt->execute();
     }
 
+    public function updateWord($word_id, $word, $letter_id) {
+        $stmt = $this->db->prepare("UPDATE words SET word = ?, letter_id = ? WHERE id = ?");
+        $stmt->bind_param("sii", $word, $letter_id, $word_id);
+    
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function getWordById($id) {
+        // Preparar la consulta SQL
+        $query = "SELECT * FROM words WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+
+        if ($stmt === false) {
+            die('Error al preparar la consulta: ' . $this->db->error);
+        }
+
+        // Vincular parámetros y ejecutar la consulta
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+
+        // Obtener el resultado de la consulta
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 0) {
+            return null; // No se encontró ninguna palabra con ese ID
+        }
+
+        // Obtener los datos de la palabra
+        $word = $result->fetch_assoc();
+
+        // Cerrar la declaración y devolver los datos de la palabra
+        $stmt->close();
+
+        return $word;
+    }
+
     public function getAllWords() {
         $query = "SELECT * FROM words";
         $result = $this->db->query($query);
