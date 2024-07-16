@@ -17,6 +17,7 @@ class AdminController {
         session_start();
         // Verificar si el usuario está autenticado
         $this->requireLogin();
+
         $words = $this->wordModel->getAllWords();
 
         // Lógica para mostrar la vista del panel de administrador
@@ -108,7 +109,7 @@ class AdminController {
 
     protected function requireLogin() {
         if (!isset($_SESSION['username'])) {
-            header('Location: index.php?page=admin_login');
+            $this->render("admin_login");
             exit;
         }
     }
