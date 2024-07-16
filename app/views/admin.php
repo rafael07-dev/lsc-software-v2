@@ -5,38 +5,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Empresa</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="public/css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
 </head>
 
-<body class="d-flex flex-column h-100">
+<body class="bg-gray-200">
 
     <!-- Begin page content -->
-    <main class="flex-shrink-0">
-        <div class="container">
-            <h3 class="my-3" id="titulo">Panel administrador</h3>
+    <main class="my-10 mx-40">
+        <div class="container mx-auto">
+            <h3 id="titulo" class="font-bold">Panel administrador</h3>
 
-            <a href="index.php?page=admin_add_word" class="btn btn-success">Agregar</a>
+            <a class="inline-block align-baseline font-bold bg-red-500 px-2 py-1 text-sm text-white rounded" href="index.php?page=admin_logout">Cerrar session</a>
 
-            <table class="table table-hover table-bordered my-3" aria-describedby="titulo">
-                <thead class="table-dark">
-                    <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Palabra</th>
-                        <th scope="col">Opciones</th>
+            <a href="index.php?page=admin_add_word" class="bg-green-500 text-white py-1 px-2 rounded hover:bg-green-600 ml-2">Agregar</a>
+
+            <table class="min-w-full bg-white border border-gray-300" aria-describedby="titulo">
+                <thead>
+                    <tr class="bg-gray-800 text-white">
+                        <th class="py-2 px-4 border border-b border-gray-300" scope="col">Id</th>
+                        <th class="py-2 px-4 border border-b border-gray-300" scope="col">Palabra</th>
+                        <th class="py-2 px-4 border border-b border-gray-300" scope="col">Opciones</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     <?php foreach ($data['words'] as $word) : ?>
-                        <tr>
-                            <td><?php echo $word['id'] ?></td>
-                            <td><?php echo $word['word'] ?></td>
+                        <tr class="hover:bg-gray-100">
+                            <td class="py-2 px-4 border border-b border-gray-300"><?php echo $word['id'] ?></td>
+                            <td class="py-2 px-4 border border-b border-gray-300"><?php echo $word['word'] ?></td>
 
-                            <td>
-                            <a href="index.php?page=admin_edit_word&id=<?php echo $word['id'] ?>" class="btn btn-warning btn-sm me-2">Editar</a>
-                            <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#eliminaModal" data-bs-id="<?php echo $word['id'] ?>">Eliminar</a>
+                            <td class="py-2 px-4 border border-b border-gray-300">
+                                <a class="bg-yellow-500 text-white py-1 px-2 rounded hover:bg-yellow-600" href="index.php?page=admin_edit_word&id=<?php echo $word['id'] ?>">Editar</a>
+                                <a onclick="openEliminaModal(<?php echo $word['id'] ?>)" class="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600 ml-2" href="#" data-bs-toggle="modal" data-bs-target="#eliminaModal" data-bs-id="<?php echo $word['id'] ?>">Eliminar</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -45,20 +47,14 @@
         </div>
     </main>
 
-    <footer class="footer mt-auto py-3 bg-body-tertiary">
-        <div class="container">
-            <span class="text-body-secondary"> 2024 | Códigos de Programación</span>
-        </div>
-    </footer>
-
-    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
+    <div class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+        <div class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all max-w-md w-full">
+            <div class="flex justify-between items-center px-4 py-2 border-b">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="notificationModalLabel">Notificación</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h1 class="text-lg font-semibold" id="notificationModalLabel">Notificación</h1>
+                    <button onclick="closeNotificationModal()" type="button" class="text-gray-500 hover:text-gray-700s" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="p-4">
                     <?php if (isset($data['success'])) : ?>
                         <p><?php echo $data['success']; ?></p>
                     <?php endif; ?>
@@ -66,55 +62,60 @@
                         <p><?php echo $data['error']; ?></p>
                     <?php endif; ?>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+                <div class="px-4 py-2 bg-gray-100 flex justify-end">
+                    <button onclick="closeNotificationModal()" type="button" class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded" data-bs-dismiss="modal">Aceptar</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="eliminaModal" tabindex="-1" aria-labelledby="eliminaModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="eliminaModalLabel">Aviso</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>¿Desea eliminar este registro?</p>
-                </div>
-                <div class="modal-footer">
-                    <form id="form-elimina" method="post">
-                        <input type="hidden" name="_method" value="delete">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-danger">Eliminar</button>
-                    </form>
-                </div>
+    <div id="eliminaModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all max-w-md w-full">
+            <div class="flex justify-between items-center px-4 py-2 border-b">
+                <h1 class="text-lg font-semibold" id="eliminaModalLabel">Aviso</h1>
+                <button onclick="closeEliminaModal()" class="text-gray-500 hover:text-gray-700">&times;</button>
+            </div>
+            <div class="p-4">
+                <p>¿Desea eliminar este registro?</p>
+            </div>
+            <div class="px-4 py-2 bg-gray-100 flex justify-end space-x-2">
+                <form id="form-elimina" method="post" class="flex space-x-2">
+                    <input type="hidden" name="_method" value="delete">
+                    <button type="button" onclick="closeModal('eliminaModal')" class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded">Cerrar</button>
+                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded">Eliminar</button>
+                </form>
             </div>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
     <script>
         <?php if (isset($data['success']) || isset($data['error'])) : ?>
-            var notificationModal = new bootstrap.Modal(document.getElementById('notificationModal'));
-            notificationModal.show();
+            document.addEventListener('DOMContentLoaded', function() {
+                const notificationModal = document.getElementById('notificationModal');
+                notificationModal.classList.remove('hidden');
+            });
         <?php endif; ?>
 
+        function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.classList.add('hidden');
+    }
 
-        const eliminaModal = document.getElementById('eliminaModal')
-        if (eliminaModal) {
-            eliminaModal.addEventListener('show.bs.modal', event => {
-                // Button that triggered the modal
-                const button = event.relatedTarget
-                // Extract info from data-bs-* attributes
-                const id = button.getAttribute('data-bs-id')
+        function closeNotificationModal() {
+            const notificationModal = document.getElementById('notificationModal');
+            notificationModal.classList.add('hidden');
+        }
 
-                // Update the modal's content.
-                const form = eliminaModal.querySelector('#form-elimina')
-                form.setAttribute('action', 'index.php?page=delete_word&id=' + id)
-            })
+        function openEliminaModal(id) {
+            const modal = document.getElementById('eliminaModal');
+            modal.classList.remove('hidden');
+            const form = modal.querySelector('#form-elimina');
+            form.action = 'index.php?page=delete_word&id=' + id;
+        }
+
+        function closeEliminaModal() {
+            const modal = document.getElementById('eliminaModal');
+            modal.classList.add('hidden');
         }
     </script>
 
