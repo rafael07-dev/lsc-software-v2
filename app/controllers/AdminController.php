@@ -2,15 +2,18 @@
 
 require_once './app/models/User.php';
 require_once './app/models/Word.php';
+require_once './app/models/Letter.php';
 
 class AdminController {
 
     protected $userModel;
     protected $wordModel;
+    protected $letterModel;
 
     public function __construct() {
         $this->userModel = new User();
         $this->wordModel = new Word();
+        $this->letterModel = new Letter();
     }
 
     public function index() {
@@ -18,10 +21,11 @@ class AdminController {
         // Verificar si el usuario está autenticado
         $this->requireLogin();
 
+        $letters = $this->letterModel->getLetters();
         $words = $this->wordModel->getAllWords();
 
         // Lógica para mostrar la vista del panel de administrador
-        $this->render('admin', compact('words'));
+        $this->render('admin', compact('words', 'letters'));
         //require_once './app/views/admin.php';
     }
 
