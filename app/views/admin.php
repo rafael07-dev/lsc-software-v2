@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Empresa</title>
+    <title>lSC SOFTWARE</title>
 
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
@@ -19,7 +19,7 @@
 
             <a class="inline-block align-baseline font-bold bg-red-500 px-2 py-1 text-sm text-white rounded" href="index.php?page=admin_logout">Cerrar session</a>
 
-            <a href="index.php?page=admin_add_word" class="bg-green-500 text-white py-1 px-2 rounded hover:bg-green-600 ml-2">Agregar</a>
+            <button onclick="openAgregaModal()" class="bg-green-500 text-white py-1 px-2 rounded hover:bg-green-600 ml-2">Agregar</button>
 
             <table class="min-w-full bg-white border border-gray-300" aria-describedby="titulo">
                 <thead>
@@ -47,6 +47,8 @@
         </div>
     </main>
 
+    <!-- modal notificacion-->
+
     <div class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
         <div class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all max-w-md w-full">
             <div class="flex justify-between items-center px-4 py-2 border-b">
@@ -69,6 +71,8 @@
         </div>
     </div>
 
+    <!-- modal eliminar registro-->
+
     <div id="eliminaModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden">
         <div class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all max-w-md w-full">
             <div class="flex justify-between items-center px-4 py-2 border-b">
@@ -88,6 +92,48 @@
         </div>
     </div>
 
+    <!-- modal agregar registro-->
+
+    <div id="agregaModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all max-w-md w-full">
+            <div class="flex justify-between items-center px-4 py-2 border-b">
+                <h1 class="text-lg font-semibold" id="eliminaModalLabel">Agregar nueva palabra</h1>
+                <button onclick="closeAgregaModal()" class="text-gray-500 hover:text-gray-700">&times;</button>
+            </div>
+            
+            <div class="px-4 py-2 bg-gray-100 flex justify-end space-x-2">
+                <form id="form-agrega" method="post" class="flex space-x-2">
+
+                    <div class="col-md-4">
+                        <label for="letter">Letra:</label>
+                        <select id="letter" name="letter_id" required>
+                            <?php foreach ($data['letters'] as $letter) : ?>
+                                <option value="<?php echo $letter['id']; ?>"><?php echo $letter['letter']; ?></option>
+                            <?php endforeach; ?>
+                        </select><br><br>
+                    </div>
+
+                    <div class="col-md-8">
+                        <label for="nombre" class="form-label">Palabra</label>
+                        <input type="text" class="form-control" id="word" name="word" required>
+                    </div>
+
+                    <div class="flex items-center space-x-1">
+                        <button type="button" onclick="closeModal('agregaModal')" class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded">Cerrar</button>
+                        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Guardar</button>
+                    </div>
+
+                    <!--
+
+                    <input type="hidden" name="_method" value="delete">
+                    <button type="button" onclick="closeModal('eliminaModal')" class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded">Cerrar</button>
+                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded">Eliminar</button>
+                    -->
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script>
         <?php if (isset($data['success']) || isset($data['error'])) : ?>
             document.addEventListener('DOMContentLoaded', function() {
@@ -97,9 +143,9 @@
         <?php endif; ?>
 
         function closeModal(modalId) {
-        const modal = document.getElementById(modalId);
-        modal.classList.add('hidden');
-    }
+            const modal = document.getElementById(modalId);
+            modal.classList.add('hidden');
+        }
 
         function closeNotificationModal() {
             const notificationModal = document.getElementById('notificationModal');
@@ -113,8 +159,20 @@
             form.action = 'index.php?page=delete_word&id=' + id;
         }
 
+        function openAgregaModal() {
+            const modal = document.getElementById('agregaModal');
+            modal.classList.remove('hidden');
+            const form = modal.querySelector('#form-agrega');
+            form.action = 'index.php?page=create_word';
+        }
+
         function closeEliminaModal() {
             const modal = document.getElementById('eliminaModal');
+            modal.classList.add('hidden');
+        }
+
+        function closeAgregaModal() {
+            const modal = document.getElementById('agregaModal');
             modal.classList.add('hidden');
         }
     </script>
