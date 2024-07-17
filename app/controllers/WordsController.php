@@ -30,8 +30,12 @@ class WordsController{
 
             if ($result) {
                 $success = "Palabra creada exitosamente.";
-                header('Location: index.php?page=admin');
-                exit();
+
+                $letters = $this->getAllLetters();
+                $words = $this->getAllWords();
+                $this->render('admin', compact('words', 'letters', 'success', 'error'));
+                
+                exit;
             } else {
                 $error = "Error al crear la palabra.";
             }
@@ -116,6 +120,10 @@ class WordsController{
 
     public function getAllLetters() {
         return $this->letterModel->getLetters();
+    }
+
+    public function getAllWords() {
+        return $this->wordModel->getAllWords();
     }
 
     protected function render($view, $data = []) {
