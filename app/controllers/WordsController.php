@@ -70,29 +70,6 @@ class WordsController{
         }
     }
 
-    public function editWord() {
-        if (isset($_GET['id'])) {
-            $wordId = $_GET['id'];
-            // Aquí deberías cargar los datos de la palabra usando el modelo correspondiente
-            $word = $this->wordModel->getWordById($wordId);
-            $letters = $this->getAllLetters();
-            
-            if ($word) {
-                // Renderizar la vista para editar la palabra, pasando los datos necesarios
-                $this->render('admin_edit_word', compact('word', 'letters'));
-            } else {
-                // Manejar el caso en el que no se encuentre la palabra
-                $error = "La palabra no existe.";
-                $this->render('admin', compact('error'));
-            }
-        } else {
-            // Manejar el caso en el que no se proporcionó un ID de palabra válido
-            $error = "ID de palabra no proporcionado.";
-            $this->render('admin', compact('error'));
-        }
-    }
-    
-
     public function updateWord() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $word_id = $_POST['word_id'];
