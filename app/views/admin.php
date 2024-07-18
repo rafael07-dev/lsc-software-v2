@@ -37,7 +37,7 @@
                             <td class="py-2 px-4 border border-b border-gray-300"><?php echo $word['word'] ?></td>
 
                             <td class="py-2 px-4 border border-b border-gray-300">
-                                <a class="bg-yellow-500 text-white py-1 px-2 rounded hover:bg-yellow-600" href="index.php?page=admin_edit_word&id=<?php echo $word['id'] ?>">Editar</a>
+                                <a onclick="openEditModal(<?php echo $word['id'] ?>, '<?php echo $word['word'] ?>', <?php echo $word['letter_id'] ?>)" href="#" class="bg-yellow-500 text-white py-1 px-2 rounded hover:bg-yellow-600">Editar</a>
                                 <a onclick="openEliminaModal(<?php echo $word['id'] ?>)" class="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600 ml-2" href="#" data-bs-toggle="modal" data-bs-target="#eliminaModal" data-bs-id="<?php echo $word['id'] ?>">Eliminar</a>
                             </td>
                         </tr>
@@ -100,7 +100,7 @@
                 <h1 class="text-lg font-semibold" id="eliminaModalLabel">Agregar nueva palabra</h1>
                 <button onclick="closeAgregaModal()" class="text-gray-500 hover:text-gray-700">&times;</button>
             </div>
-            
+
             <div class="px-4 py-2 bg-gray-100 flex justify-end space-x-2">
                 <form id="form-agrega" method="post" class="flex space-x-2">
 
@@ -122,13 +122,41 @@
                         <button type="button" onclick="closeModal('agregaModal')" class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded">Cerrar</button>
                         <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Guardar</button>
                     </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-                    <!--
+    <!-- modal editar registro-->
 
-                    <input type="hidden" name="_method" value="delete">
-                    <button type="button" onclick="closeModal('eliminaModal')" class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded">Cerrar</button>
-                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded">Eliminar</button>
-                    -->
+    <div id="editModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all max-w-md w-full">
+            <div class="flex justify-between items-center px-4 py-2 border-b">
+                <h1 class="text-lg font-semibold" id="eliminaModalLabel">Editar palabra</h1>
+                <button onclick="closeEditModal()" class="text-gray-500 hover:text-gray-700">&times;</button>
+            </div>
+
+            <div class="px-4 py-2 bg-gray-100 flex justify-end space-x-2">
+                <form id="form-edit" method="post" class="flex space-x-2">
+                    <input type="hidden" name="word_id" value="" id="word_id">
+                    <div>
+                        <label for="letter">Letra:</label>
+                        <select id="selec_letter" name="letter_id" required>
+                            <?php foreach ($data['letters'] as $letter) : ?>
+                                <option value="<?php echo $letter['id']; ?>" > <?php echo $letter['letter']; ?></option>
+                            <?php endforeach; ?>
+                        </select><br><br>
+                    </div>
+
+                    <div>
+                        <label for="word" class="form-label">Palabra</label>
+                        <input type="text" class="form-control" value="" id="input_word" name="word">
+                    </div>
+
+                    <div class="flex items-center space-x-1">
+                        <button type="button" onclick="closeEditModal()" class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded">Cerrar</button>
+                        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Guardar</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -166,6 +194,34 @@
             form.action = 'index.php?page=create_word';
         }
 
+        function openEditModal(id, word, letter) {
+            const modal = document.getElementById('editModal');
+            const inputWord = document.getElementById('input_word');
+            const inputLetter = document.getElementById('selec_letter');
+            const inputWordId = document.getElementById('word_id');
+
+            if (modal && inputWord && inputLetter && inputWordId) {
+
+                inputWord.value = word;
+                inputLetter.value = letter;
+                inputWordId.value = id;
+
+                modal.classList.remove('hidden');
+
+                const form = modal.querySelector('#form-edit');
+                if (form) {
+                    form.action = 'index.php?page=update_word';
+                }
+            } else {
+                console.error('Uno o más elementos no fueron encontrados en el DOM.');
+            }
+
+        }
+
+        function getParamsWord() {
+
+        }
+
         function closeEliminaModal() {
             const modal = document.getElementById('eliminaModal');
             modal.classList.add('hidden');
@@ -173,6 +229,11 @@
 
         function closeAgregaModal() {
             const modal = document.getElementById('agregaModal');
+            modal.classList.add('hidden');
+        }
+
+        function closeEditModal() {
+            const modal = document.getElementById('editModal');
             modal.classList.add('hidden');
         }
     </script>
