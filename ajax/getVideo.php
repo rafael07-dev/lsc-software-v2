@@ -11,11 +11,11 @@ if (isset($_GET['word_id'])) {
 }
 
 if ($videoUrl) {
-    echo '<h2>Vídeo para la palabra seleccionada:</h2>';
+    echo '<h2 class="text-gray-600 font-bold">Vídeo para la palabra seleccionada:</h2>';
     echo '<video width="320" height="240" controls autoplay loop>';
     echo '<source src="' . $videoUrl . '" type="video/mp4">';
     echo 'Tu navegador no soporta la etiqueta de vídeo.';
     echo '</video>';
 } else {
-    echo '<p>No se encontró el vídeo para la palabra seleccionada.</p>';
+    echo '<p class="text-gray-600 font-bold">No se encontró el vídeo para la palabra seleccionada.</p>';
 }
