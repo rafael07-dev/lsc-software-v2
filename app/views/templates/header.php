@@ -3,7 +3,7 @@
     <nav>
         <a class="flex space-x-2 items-center aling-center text-gray-600"  href="index.php?page=main">
             <img src="public/img/logo.png" width="35" height="35" class="" alt="">
-            <h3>LCS SOFTWARE</h3>
+            <h3 class="text-gray-600 font-bold">LCS SOFTWARE</h3>
         </a>
     </nav>
     <nav>
